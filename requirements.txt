@@ -14,7 +14,7 @@ opencv-python==4.3.0.36
 Pillow==7.2.0
 pylint==2.5.3
 pyparsing==2.4.7
-pypylon==1.5.4.dev0+pylon6.1.2
+pypylon==1.6.0.dev0+pylon6.1.2
 python-dateutil==2.8.1
 pythreshold==0.3.1
 pyusb==1.0.2

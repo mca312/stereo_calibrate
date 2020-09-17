@@ -56,9 +56,11 @@ def test_calibrate():
   new_camera_matrix_r, roi_r = cv2.getOptimalNewCameraMatrix(K_r, dist_r, img_shape, 1, img_shape)
   new_camera_matrix_l, roi_l = cv2.getOptimalNewCameraMatrix(K_l, dist_l, img_shape, 1, img_shape)
 
-  cameras = Cameras()
+  # cameras = Cameras()
   while True:
-    frame_r, frame_l = cameras.grab_one()
+    # frame_r, frame_l = cameras.grab_one()
+    frame_r = chess_img_r  # TEMP IMAGES from the camera to create disparity map
+    frame_l = chess_img_l  # these are usually grabbed from the camera but removing the camera dependency for testing
 
     res = np.hstack((frame_r, frame_l))
     cv2.imshow('camera', res)

@@ -15,7 +15,7 @@ def main():
   test_calibrate() # uses photos
 
 def test_calibrate():
-  criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+  flags = (cv2.CALIB_CB_EXHAUSTIVE + cv2.CALIB_CB_ACCURACY + cv2.CALIB_CB_MARKER) # for findChessboardCornersSB
   obj_points = []
   img_points_r = []
   img_points_l = []
@@ -38,15 +38,13 @@ def test_calibrate():
     chess_img_r = cv2.imread('{0}/chessboard-R{1}.png'.format(DIR_NAME, t), 0)
     img_shape = chess_img_r.shape[:2]
     try:
-      chessboard_l_found, corners_l = cv2.findChessboardCorners(chess_img_l, CHESSBOARD_SIZE, None)
-      chessboard_r_found, corners_r = cv2.findChessboardCorners(chess_img_r, CHESSBOARD_SIZE, None)
+      chessboard_l_found, corners_l = cv2.findChessboardCornersSB(chess_img_l, CHESSBOARD_SIZE, flags=flags)
+      chessboard_r_found, corners_r = cv2.findChessboardCornersSB(chess_img_r, CHESSBOARD_SIZE, flags=flags)
     except Exception as ex:
       print('error finding chessboard {0}'.format(t))
 
     if chessboard_l_found == True & chessboard_r_found == True:
       print('Found {0}'.format(t))
-      cv2.cornerSubPix(chess_img_l, corners_l, (5, 5), (-1, -1), criteria)
-      cv2.cornerSubPix(chess_img_r, corners_r, (5, 5), (-1, -1), criteria)
       obj_points.append(objp)
       img_points_l.append(corners_l)
       img_points_r.append(corners_r)
@@ -77,8 +75,8 @@ def test_calibrate():
   print('R: ', R)
   print('T:', T)
 
-  left_map = cv2.initUndistortRectifyMap(matrix_l, dist_coef_l, rot_l, new_camera_matrix_l, img_shape, cv2.CV_16SC2)
-  right_map = cv2.initUndistortRectifyMap(matrix_r, dist_coef_r, rot_r, new_camera_matrix_r, img_shape, cv2.CV_16SC2)
+  left_map = cv2.initUndistortRectifyMap(matrix_l, dist_coef_l, rot_l, proj_l, img_shape, cv2.CV_16SC2)
+  right_map = cv2.initUndistortRectifyMap(matrix_r, dist_coef_r, rot_r, proj_r, img_shape, cv2.CV_16SC2)
 
   stereo_map = (left_map, right_map)
   with open('stereo_map.pickle', 'wb') as handle:

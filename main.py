@@ -92,13 +92,9 @@ def test_calibrate():
     print('roi_l:', roi_l, ' - roi_r:', roi_r)
     ret = cv2.getValidDisparityROI(roi_l, roi_r, 1, 10, 5)
     print(ret)
-    undistort_l = cv2.undistort(frame_l, K_l, dist_l, None, new_camera_matrix_l)
-    undistort_r = cv2.undistort(frame_r, K_r, dist_r, None, new_camera_matrix_r)
-    cv2.imshow('undistort_l', undistort_l)
-    cv2.imshow('undistort_r', undistort_r)
 
-    left_rectified = cv2.remap(undistort_l, left_map[0], left_map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
-    right_rectified = cv2.remap(undistort_r, right_map[0], right_map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
+    left_rectified = cv2.remap(frame_l, left_map[0], left_map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
+    right_rectified = cv2.remap(frame_r, right_map[0], right_map[1], interpolation=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT)
     cv2.imshow('left_rectified', left_rectified)
     cv2.imshow('right_rectified', right_rectified)
 
